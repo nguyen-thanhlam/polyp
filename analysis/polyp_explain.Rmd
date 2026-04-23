@@ -1,0 +1,179 @@
+---
+title: "Polyp 541 Explain"
+author: "Tien, Thinh, Lam"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE, warning = F}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(gtsummary)
+library(pROC)
+library(rsample)
+library(rms)
+library(predtools)
+library(readxl)
+library(dcurves)
+library(tidyverse)
+
+df <- read_xlsx("C:\\R\\Polyp\\data\\polyp.xlsx")
+```
+
+``` {r factor, include = F}
+df$Sex <- factor(df$Sex, levels = c(0,1), labels = c("Male", "Female"))
+
+df$TSPDT <- ifelse(df$TSPDT >= 1, 1, 0)
+df$TSPDT <- factor(df$TSPDT, levels = c(0,1), labels = c("No", "Yes"))
+
+df$smoking <- ifelse(df$Thuocla >= 1, 1, 0)
+df$smoking <- factor(df$smoking, levels = c(0,1), labels = c("Non-smoking", "Smoking"))
+
+df$rightcolon <- ifelse(df$Location >= 6, 1, 0)
+df$rightcolon <- factor(df$rightcolon, levels = c(0,1), labels = c("Left", "Right"))
+
+df$kichthuoclon <- ifelse(df$Size >= 6, 1, 0)
+df$kichthuoclon <- factor(df$kichthuoclon, levels = c(0,1), labels = c("<=5mm", ">5mm"))
+summary(df$kichthuoclon)
+
+df$Paris <- ifelse(df$Paris %in% c("Is", "Ip"), 1, 0)
+df$Paris <- factor(df$Paris, levels = c(0,1), labels = c("IIa", "Is-Ip"))
+
+df$WLE <- ifelse(df$WLE == 2, 1, 0)
+df$WLE <- factor(df$WLE, levels = c(0,1), labels = c("non", "neo"))
+
+df$nhompolyp <- ifelse(df$nhompolyp == 1, 1, 0)
+df$nhompolyp <- factor(df$nhompolyp, levels = c(0,1), labels = c("Không tân sinh", "Tân sinh"))
+
+df$Tuoicao <- ifelse(df$Age >= 45, 1, 0)
+df$Tuoicao <- factor(df$Tuoicao, levels = c(0,1), labels = c("<45yrs", ">=45yrs"))
+
+df$TSUTDT <- factor(df$TSUTDT, levels = c(0,1), labels = c("No", "Yes"))
+
+df$TSGD <- factor(df$TSGD, levels = c(0,1), labels = c("No", "Yes"))
+
+df$Ruou <- factor(df$Ruou, levels = c(0,1), labels = c("No", "Yes"))
+
+df$BMI <- (df$CN / (df$Cao/100)^2) 
+
+df$NBI <- ifelse(df$NBI == 2, 1, 0)
+df$NBI <- factor(df$NBI, levels = c(0,1), labels = c("Không tân sinh", "Tân sinh"))
+```
+
+```{r split, include = F}
+set.seed(111)
+dfsplit <- initial_split(df, prop = 0.7)
+df_train <- training(dfsplit)
+df_test  <- testing(dfsplit)
+```
+
+## **DUPLICATION**
+```{r dup, echo = F, eval = T}
+a <- df[,c("HovatenBN", "Sex", "Age")]
+a %>% group_by(HovatenBN, Sex, Age) %>% mutate(freq = 1:n())
+
+```
+
+* Trong dữ liệu ta thấy có sự lặp lại giữa các bệnh nhân nhưng có sự khác biệt về Location, Size,... nên 541 dòng trong data được xem như 541 dòng khác nhau.
+* Nếu cùng một người, cùng độ tuổi, giới tính và có giá trị khối u khác nhau thì dữ liệu biến Tuổi có nên bỏ ra không vì không mang tính đại diện và có sự trùng lắp nhiều lần dẫn đến kết quả không chính xác.
+
+## **DATA SPLITTING**
+
+Về phần data split thành nhóm train và nhóm test, dưới đây là phần trăm của nhóm polyp tân sinh và không tân sinh trên mỗi nhóm (data, train, test). Dựa vào cả 3 nhóm thì phần trăm nhóm polyp không tân sinh luôn xấp xỉ 43% và nhóm polyp tân sinh luôn xấp xỉ 57%.
+
+**Data**
+```{r prop1, echo = F, eval = T}
+prop.table(table(df$nhompolyp))
+```
+
+**Training**
+```{r prop2, echo = F, eval = T}
+prop.table(table(df_train$nhompolyp))
+```
+
+**Validation**
+```{r prop3, echo = F, eval = T}
+prop.table(table(df_test$nhompolyp))
+```
+
+## **TABLE SUMMARY**
+```{r tbl, echo = F, eval = T}
+t1 <- tbl_summary(df, by = nhompolyp, include = c(WLE, kichthuoclon, Paris, rightcolon, Tuoicao),
+            digits = c(all_categorical() ~ c(0, 1),
+                       all_continuous() ~ 1),
+            statistic = list(all_continuous() ~ "{mean} ({sd})")) %>%
+  add_p(pvalue_fun = function(x) style_pvalue(x, digits = 3),
+        test = list(all_continuous() ~ "t.test", all_categorical() ~ "chisq.test"))
+
+t2 <- tbl_summary(df_train, by = nhompolyp, include = c(WLE, kichthuoclon, Paris, rightcolon, Tuoicao),
+            digits = c(all_categorical() ~ c(0, 1),
+                       all_continuous() ~ 1),
+            statistic = list(all_continuous() ~ "{mean} ({sd})")) %>%
+  add_p(pvalue_fun = function(x) style_pvalue(x, digits = 3),
+        test = list(all_continuous() ~ "t.test", all_categorical() ~ "chisq.test"))
+
+t3 <- tbl_summary(df_test, by = nhompolyp, include = c(WLE, kichthuoclon, Paris, rightcolon, Tuoicao),
+            digits = c(all_categorical() ~ c(0, 1),
+                       all_continuous() ~ 1),
+            statistic = list(all_continuous() ~ "{mean} ({sd})")) %>%
+  add_p(pvalue_fun = function(x) style_pvalue(x, digits = 3),
+        test = list(all_continuous() ~ "t.test", all_categorical() ~ "chisq.test"))
+
+b <- tbl_merge(list(t1, t2, t3), tab_spanner = c("Data","Training","Validation"))
+b
+```
+
+## **MOD3**
+```{r model, echo=FALSE}
+# WLE + Tuoicao + Paris + kichthuoclon + rightcolon
+mod3 <- glm(nhompolyp ~ WLE + Tuoicao + Paris + kichthuoclon + rightcolon, data = df_train, family = "binomial")
+summary(mod3)
+```
+
+Nhìn vào kết quả của bảng summary model sử dụng:
+
+* Khi sử dụng hồi quay đa biến thì chỉ có biến WLE có ý nghĩa thống kê
+* Chỉ số p-value của các biến khác đều >0.05 dẫn đến việc xuất hiện của các biến không còn ý nghĩa thống kê. Và việc đưa vào nomogram cũng sẽ không còn ý nghĩa để tính điểm.
+
+*Anh Thịnh có gợi ý rằng mình sử dụng data đầu tiên, hơn 400 cases thì khi phân tích các biến có ý nghĩa hơn.*
+
+Giả định có thể xảy ra: khi mình sử dụng hồi quy đa biến, các biến số trong một dữ liệu có thể tác động lẫn nhau dẫn đến kết quả sai lệch. 
+
+* Ví dụ: Kích thước lớn có thể là một trong các yếu tố dẫn đến ung thư đại trực tràng. Tuy nhiên yếu tố tuổi cao cũng có thể dẫn đến kích thước lớn hoặc ung thư đại trực tràng có thể khiến kích thước polyp to ra. Đây có thể là trường hợp M-bias nhắc đến ở trên.
+
+## **DECISION CURVE ANALYSIS**
+``` {r dca, message = F, warning = F, echo = F, eval = T}
+df_test$pred <- predict(mod3, df_test, type = "response")
+
+dcurve <- dca(nhompolyp ~ pred, 
+              data = df_test,
+              as_probability = c("pred")
+)
+
+plot(dcurve)
+```
+
+Theo như hình trên và code mình có thể hiểu được là:
+
+* Model đang sử dụng: nhompolyp ~ WLE + Tuoicao + kichthuoclon + Paris + rightcolon
+* nhompolyp: the outcome
+* WLE, Tuoicao, kichthuoclon, Paris, rightcolon: the predictor variables
+* as_probability: các biến tiên lượng được sử dụng như xác suất và điều này cần thiết để vẽ một DCA
+
+**Đọc kết quả thôi nào!!**
+
+**Đường cong lợi ích ròng (Net benefit curve):** Đường cong DCA được vẽ với trục x biểu thị xác suất ngưỡng (xác suất trên đó điều trị cho bệnh nhân) và trục y biểu thị lợi ích ròng. Lợi ích ròng được tính bằng cách so sánh lợi ích (dương tính thực) và tác hại (dương tính giả) của việc sử dụng mô hình để đưa ra quyết định điều trị.
+
+**Hình dạng đường cong:** Kiểm tra hình dạng của đường cong. Điều quan trọng là phải quan sát xem liệu đường cong có nằm trên đường không có lợi ích ròng hay không (đường ngang ở mức 0) qua các ngưỡng xác suất khác nhau.
+
+**Lợi ích ròng dương:** Nếu đường cong luôn nằm trên đường lợi ích ròng bằng 0, điều đó cho thấy rằng việc sử dụng mô hình để hướng dẫn các quyết định điều trị là có lợi so với việc điều trị cho tất cả mọi người và không điều trị cho ai. Điều này có nghĩa là các dự đoán của mô hình sẽ tăng thêm giá trị trong quá trình ra quyết định lâm sàng.
+
+**Ngưỡng tối ưu:** Xác định điểm trên đường cong gần đường lợi ích ròng bằng 0 nhất. Điểm này là xác suất ngưỡng tối ưu. Đó là mức xác suất mà tại đó các dự đoán của mô hình mang lại lợi ích ròng tối đa, tạo ra sự cân bằng hợp lý giữa các dự đoán tích cực thực sự và các dự đoán dương tính giả.
+
+**So sánh với các chiến lược:** So sánh lợi ích ròng ở ngưỡng tối ưu với lợi ích ròng của chiến lược "đối xử với mọi người" và "không đối xử với ai". Nếu lợi ích ròng ở ngưỡng tối ưu cao hơn các chiến lược này, điều đó cho thấy rằng việc sử dụng mô hình sẽ có lợi hơn trong việc hướng dẫn các quyết định điều trị.
+
+**Ý nghĩa lâm sàng:** Ngưỡng tối ưu cung cấp thông tin chi tiết về thời điểm và bệnh nhân nào mà các dự đoán của mô hình có giá trị nhất. Nó thông báo cho các chuyên gia chăm sóc sức khỏe về phạm vi xác suất mà việc sử dụng mô hình sẽ nâng cao kết quả của bệnh nhân.
+
+**Hỗ trợ ra quyết định:** Đường cong DCA giúp các bác sĩ lâm sàng quyết định xem việc sử dụng mô hình dự đoán có mang lại lợi ích cho việc ra quyết định lâm sàng hay không. Nếu đường cong luôn nằm trên đường lợi ích ròng bằng 0, điều đó cho thấy rằng các dự đoán của mô hình đóng góp tích cực vào các quyết định điều trị.
+
+**Khả năng áp dụng:** Xem xét bối cảnh nghiên cứu và dân số bệnh nhân khi giải thích kết quả. Kết quả DCA có thể thay đổi dựa trên các tình huống lâm sàng khác nhau.

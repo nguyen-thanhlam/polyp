@@ -1,0 +1,207 @@
+---
+title: "Polyp"
+author: "Tien, Thinh, Lam"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(haven)
+library(gtsummary)
+library(pROC)
+library(rsample)
+library(ggplot2)
+library(rms)
+library(predtools)
+library(readxl)
+library(dcurves)
+
+df <- read_sav("C:\\polyp\\data\\polyp.sav")
+```
+
+## **TABLE SUMMARY**
+```{r tbl, echo = F, eval = T, warning = F, message= F}
+tbl_summary(df, by = nhompolyp, include = c(Age, Sex, TSUTDT, TSPDT, TSGD, HTL, Ruou, BMI, kichthuoclon, Paris, rightcolon),
+            digits = c(all_categorical() ~ c(0, 1),
+                       all_continuous() ~ 1),
+            statistic = list(all_continuous() ~ "{mean} ({sd})")) %>%
+  add_p(pvalue_fun = function(x) style_pvalue(x, digits = 3),
+        test = list(all_continuous() ~ "t.test", all_categorical() ~ "chisq.test"))
+```
+
+```{r split, include = F}
+set.seed(123)
+dfsplit <- initial_split(df, prop = 0.7)
+df_train <- training(dfsplit)
+df_test  <- testing(dfsplit)
+```
+## **PROP TABLE OF DATA SPLITTING**
+Data
+```{r prop1, echo = F, eval = T}
+prop.table(table(df$nhompolyp))
+```
+Training
+```{r prop2, echo = F, eval = T}
+prop.table(table(df_train$nhompolyp))
+```
+Validation
+```{r prop3, echo = F, eval = T}
+prop.table(table(df_test$nhompolyp))
+```
+
+## **ROC CURVES**
+``` {r roc, echo = F, eval = T, message = F, warning = F}
+# WLE
+mod1 <- glm(nhompolyp ~ WLE, data = df_train, family = "binomial")
+pred <- predict(mod1, df_test, type = "response")
+roc1 <- roc(df_test$nhompolyp, pred, ci = T)
+
+# Tuoicao + Paris + kichthuoclon + rightcolon
+mod2 <- glm(nhompolyp ~ Tuoicao + Paris + kichthuoclon + rightcolon, data = df_train, family = "binomial")
+pred <- predict(mod2, df_test, type = "response")
+roc2 <- roc(df_test$nhompolyp, pred, ci = T)
+
+# WLE + Tuoicao + Paris + kichthuoclon + rightcolon
+mod3 <- glm(nhompolyp ~ WLE + Tuoicao + Paris + kichthuoclon + rightcolon, data = df_train, family = "binomial")
+pred <- predict(mod3, df_test, type = "response")
+roc3 <- roc(df_test$nhompolyp, pred, ci = T)
+
+
+# ROC curves
+roc.list <- list(roc1, roc2, roc3)
+ggroc(roc.list, aes = "color", size = 1, legacy.axes = T) +
+  annotate("text", x = 0.2, y = 0.3, size = 6, hjust = 0,
+           label = paste0("WLE + 4 factors = ", sprintf("%.3f", roc3$auc))) +
+  annotate("text", x = 0.2, y = 0.2, size = 6, hjust = 0,
+           label = paste0("4 factors = ", sprintf("%.3f", roc2$auc))) +
+  annotate("text", x = 0.2, y = 0.1, size = 6, hjust = 0,
+           label = paste0("WLE = ", sprintf("%.3f", roc1$auc))) +
+  theme_minimal() +
+  theme(text = element_text(size = 18)) +
+  scale_color_discrete(name = "Sens, Spec", labels = c("WLE", "4 factors", "WLE + 4 factors")) +
+  labs(x = "1 - Specificity", y = "Sensitivity") + 
+  ggtitle("ROC curves of 3 models")
+```
+
+## **MODEL SUMMARY**
+``` {r test, echo = F, eval = T}
+summary(mod3)
+```
+
+
+## **SENS - SPEC - ACC**
+``` {r sen, echo = F, eval = T}
+coords(roc1, x = "best", best.method="youden", ret = c("threshold", "accuracy", "sensitivity", "specificity"))
+coords(roc2, x = "best", best.method="youden", ret = c("threshold", "accuracy", "sensitivity", "specificity"))
+coords(roc3, x = "best", best.method="youden", ret = c("threshold", "accuracy", "sensitivity", "specificity"))
+```
+
+
+## **RISK SCORE**
+``` {r risk, echo = F, eval = T}
+for (score in 0:17) {
+  y <- as.numeric(min(abs(coef(mod3))) * score + coef(mod3)[1])
+  p <- exp(y) / (1 + exp(y))
+  print(paste0("Score ", score, " have risk p = ", sprintf("%.3f", p)))
+}
+```
+
+
+## **NOMOGRAM**
+``` {r nom, echo = F, eval = T, message = F, warning = F}
+d <- df_train[,c("nhompolyp", "WLE", "Paris", "Tuoicao", "kichthuoclon", "rightcolon")]
+d <- zap_labels(d)
+
+nom_labels <- c(
+  nhompolyp = "Polyp Type",
+  WLE = "White Light Endoscopy",
+  Paris = "Paris Classification",
+  Tuoicao = "Age",
+  kichthuoclon = "Colon Size",
+  rightcolon = "Location"
+)
+
+label(d) <- lapply(names(nom_labels), function(x) label(d[,x]) <- nom_labels[x])
+label(d)
+
+ddist <- datadist(d)
+options(datadist='ddist')
+
+f <- lrm(nhompolyp ~ WLE + Paris + Tuoicao + kichthuoclon + rightcolon, data = d)
+
+nom <- nomogram(f, fun = plogis, funlabel = "Risk", vnames = "labels")
+plot(nom)
+```
+
+
+## **OR PLOT**
+``` {r or, echo = F, eval = T, warning = F, message = F}
+cols <- df |> select(Tuoicao, HTL, Ruou, TSGD, kichthuoclon, Paris, rightcolon, nhompolyp)
+
+res.list <- lapply(as.list(cols), function(x) fisher.test(x, y = df$nhompolyp))
+tmp <- do.call(rbind, lapply(res.list, broom::tidy))
+tmp <- data.frame(tmp)
+
+p <- lapply(as.list(cols), function(x) chisq.test(x, y = df$nhompolyp)$p.value)
+p <- c(do.call(rbind, p))
+
+tmp$feat <- colnames(cols)
+tmp$feat <- c("≥ 45 years old", "Smoking", "Using Alcohol", "Family history of colorectal cancer", ">= 5 mm", "Paris classification", "Location", Inf)
+tmp$feat <- factor(tmp$feat, levels = rev(c("≥ 45 years old", "Smoking", "Using Alcohol", "Family history of colorectal cancer", ">= 5 mm", "Paris classification", "Location")))
+tmp$p.chisq <- p
+tmp$p.chisq <- sprintf("%.3f", tmp$p.chisq)
+tmp$p.chisq <- as.character(tmp$p.chisq)
+tmp$p.chisq <- ifelse(tmp$p.chisq == "0.000", "<0.001", tmp$p.chisq)
+tmp$range <- paste0(sprintf("%.1f", tmp$conf.low), "-", sprintf("%.1f", tmp$conf.high))
+
+ggplot(tmp[1:7,], aes(x = feat, y = estimate)) +
+  geom_pointrange(aes(ymin = conf.low, ymax = conf.high), size = 1.2) +
+  geom_hline(yintercept = 1.0, linetype = "dashed", size = 1) +
+  scale_y_log10(breaks = c(0.1, 0.2, 0.5, 1.0, 2.0, 5.0, 10), minor_breaks = NULL) +
+  labs(y = "Odds ratio", x = NULL) +
+  coord_flip(ylim = c(0.1, 20)) +
+  theme_bw() +
+  annotate("text", label = tmp$p.chisq, x = tmp$feat, y = 0.11) +
+  annotate("text", label = tmp$range, x = tmp$feat, y = 15) +
+  annotate("text", label = sprintf("%.2f", tmp$estimate), x = tmp$feat, y = tmp$estimate, vjust = -1) +
+  theme(text = element_text(size = 15))
+```
+
+
+## **CALIBRATION PLOT**
+``` {r calib, echo = F, eval = T}
+d <- df_train[,c("nhompolyp", "WLE", "Paris", "Tuoicao", "kichthuoclon", "rightcolon")]
+f <- lrm(nhompolyp ~ WLE + Paris + Tuoicao + rightcolon + kichthuoclon, data = d)
+
+d$prob_pred <- predict(f, type = "fitted")
+
+d$prob_bins <- cut(d$prob_pred, breaks = seq(0, 1, by = 0.1), labels = FALSE)
+
+d_calib <- aggregate(cbind(prob_pred, nhompolyp) ~ prob_bins, data = d, mean)
+
+ggplot(d_calib, aes(x = prob_pred, y = nhompolyp)) +
+  geom_point(size = 2.5, color = "darkgreen") +
+  geom_line(color = "darkgreen") +
+  geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "red") +
+  scale_x_continuous(breaks = seq(0, 1, 0.1)) +
+  # scale_y_continuous(breaks = seq(0, 1, 0.1)) +
+  labs(x = "Mean Predicted Probability", y = "Observed Probability") +
+  ggtitle("Calibration Plot for Polyp Data") +
+  theme_bw()
+```
+
+
+## **DECISION CURVE ANALYSIS**
+``` {r dca, message = F, warning = F, echo = F, eval = T}
+df_test$pred <- predict(mod3, df_test)
+
+dcurve <- dca(nhompolyp ~ pred, 
+              data = df_test,
+              as_probability = c("pred")
+)
+
+plot(dcurve)
+```
+
