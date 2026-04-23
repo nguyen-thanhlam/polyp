@@ -11,9 +11,9 @@
 
 <meta name="author" content="Tien, Thinh, Lam" />
 
-<meta name="date" content="2023-09-16" />
+<meta name="date" content="2023-08-24" />
 
-<title>Polyp</title>
+<title>Polyp 541 Explain</title>
 
 <script src="site_libs/header-attrs-2.20/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -351,9 +351,9 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Polyp</h1>
+<h1 class="title toc-ignore">Polyp 541 Explain</h1>
 <h4 class="author">Tien, Thinh, Lam</h4>
-<h4 class="date">2023-09-16</h4>
+<h4 class="date">2023-08-24</h4>
 
 </div>
 
@@ -382,7 +382,7 @@ aria-hidden="true"></span> </a>
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2023-09-16
+<strong>Last updated:</strong> 2023-08-24
 </p>
 <p>
 <strong>Checks:</strong> <span
@@ -528,10 +528,10 @@ relative
 <tbody>
 <tr>
 <td style="text-align:left;">
-C:\\R\\Polyp\\data\\updated_polyp1.xlsx
+C:\\R\\Polyp\\data\\polyp.xlsx
 </td>
 <td style="text-align:left;">
-data\\updated_polyp1.xlsx
+data\\polyp.xlsx
 </td>
 </tr>
 </tbody>
@@ -578,21 +578,13 @@ Ignored files:
     Ignored:    output/.Rhistory
 
 Untracked files:
+    Untracked:  analysis/figure/
     Untracked:  analysis/polyp.Rmd
-    Untracked:  analysis/polyp.qmd
     Untracked:  analysis/polyp_explain.Rmd
     Untracked:  analysis/polyp_sav.Rmd
-    Untracked:  analysis/updated_polyp.Rmd
-    Untracked:  analysis/updated_polyp.html
-    Untracked:  analysis/updated_polyp.qmd
-    Untracked:  analysis/updated_polyp_files/
     Untracked:  code/polyp.R
-    Untracked:  code/polyp1509.R
     Untracked:  data/5413_copy.xlsx
     Untracked:  data/polyp.xlsx
-    Untracked:  data/updated_polyp.xlsx
-    Untracked:  data/updated_polyp1.xlsx
-    Untracked:  data/~$updated_polyp1.xlsx
 
 </code></pre>
 <p>
@@ -615,25 +607,71 @@ There are no past versions. Publish this analysis with
 </div>
 </div>
 </div>
+<div id="duplication" class="section level2">
+<h2><strong>DUPLICATION</strong></h2>
+<pre><code># A tibble: 541 × 4
+# Groups:   HovatenBN, Sex, Age [355]
+   HovatenBN      Sex      Age  freq
+   &lt;chr&gt;          &lt;fct&gt;  &lt;dbl&gt; &lt;int&gt;
+ 1 Bùi Bích Thủy  Female    65     1
+ 2 Bùi Bích Thủy  Female    65     2
+ 3 Bùi Ngọc Thuận Male      52     1
+ 4 Bùi Thị Ảnh    Female    67     1
+ 5 Bùi Thị Thuận  Female    64     1
+ 6 Bùi Thị Thuận  Female    64     2
+ 7 Bùi Văn Bình   Male      63     1
+ 8 Bùi Văn Bình   Male      63     2
+ 9 Bùi Văn Khởi   Male      62     1
+10 Cái Văn Hạnh   Male      82     1
+# ℹ 531 more rows</code></pre>
+<ul>
+<li>Trong dữ liệu ta thấy có sự lặp lại giữa các bệnh nhân nhưng có sự
+khác biệt về Location, Size,… nên 541 dòng trong data được xem như 541
+dòng khác nhau.</li>
+<li>Nếu cùng một người, cùng độ tuổi, giới tính và có giá trị khối u
+khác nhau thì dữ liệu biến Tuổi có nên bỏ ra không vì không mang tính
+đại diện và có sự trùng lắp nhiều lần dẫn đến kết quả không chính
+xác.</li>
+</ul>
+</div>
+<div id="data-splitting" class="section level2">
+<h2><strong>DATA SPLITTING</strong></h2>
+<p>Về phần data split thành nhóm train và nhóm test, dưới đây là phần
+trăm của nhóm polyp tân sinh và không tân sinh trên mỗi nhóm (data,
+train, test). Dựa vào cả 3 nhóm thì phần trăm nhóm polyp không tân sinh
+luôn xấp xỉ 43% và nhóm polyp tân sinh luôn xấp xỉ 57%.</p>
+<p><strong>Data</strong></p>
+<pre><code>
+Không tân sinh       Tân sinh 
+     0.4362292      0.5637708 </code></pre>
+<p><strong>Training</strong></p>
+<pre><code>
+Không tân sinh       Tân sinh 
+     0.4232804      0.5767196 </code></pre>
+<p><strong>Validation</strong></p>
+<pre><code>
+Không tân sinh       Tân sinh 
+     0.4662577      0.5337423 </code></pre>
+</div>
 <div id="table-summary" class="section level2">
 <h2><strong>TABLE SUMMARY</strong></h2>
-<div id="wpjskdfgjg" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#wpjskdfgjg table {
+<div id="uvnpbizjsi" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#uvnpbizjsi table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#wpjskdfgjg thead, #wpjskdfgjg tbody, #wpjskdfgjg tfoot, #wpjskdfgjg tr, #wpjskdfgjg td, #wpjskdfgjg th {
+#uvnpbizjsi thead, #uvnpbizjsi tbody, #uvnpbizjsi tfoot, #uvnpbizjsi tr, #uvnpbizjsi td, #uvnpbizjsi th {
   border-style: none;
 }
 
-#wpjskdfgjg p {
+#uvnpbizjsi p {
   margin: 0;
   padding: 0;
 }
 
-#wpjskdfgjg .gt_table {
+#uvnpbizjsi .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -659,12 +697,12 @@ There are no past versions. Publish this analysis with
   border-left-color: #D3D3D3;
 }
 
-#wpjskdfgjg .gt_caption {
+#uvnpbizjsi .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#wpjskdfgjg .gt_title {
+#uvnpbizjsi .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -676,7 +714,7 @@ There are no past versions. Publish this analysis with
   border-bottom-width: 0;
 }
 
-#wpjskdfgjg .gt_subtitle {
+#uvnpbizjsi .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -688,7 +726,7 @@ There are no past versions. Publish this analysis with
   border-top-width: 0;
 }
 
-#wpjskdfgjg .gt_heading {
+#uvnpbizjsi .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -700,13 +738,13 @@ There are no past versions. Publish this analysis with
   border-right-color: #D3D3D3;
 }
 
-#wpjskdfgjg .gt_bottom_border {
+#uvnpbizjsi .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#wpjskdfgjg .gt_col_headings {
+#uvnpbizjsi .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -721,7 +759,7 @@ There are no past versions. Publish this analysis with
   border-right-color: #D3D3D3;
 }
 
-#wpjskdfgjg .gt_col_heading {
+#uvnpbizjsi .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -741,7 +779,7 @@ There are no past versions. Publish this analysis with
   overflow-x: hidden;
 }
 
-#wpjskdfgjg .gt_column_spanner_outer {
+#uvnpbizjsi .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -753,15 +791,15 @@ There are no past versions. Publish this analysis with
   padding-right: 4px;
 }
 
-#wpjskdfgjg .gt_column_spanner_outer:first-child {
+#uvnpbizjsi .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#wpjskdfgjg .gt_column_spanner_outer:last-child {
+#uvnpbizjsi .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#wpjskdfgjg .gt_column_spanner {
+#uvnpbizjsi .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -773,11 +811,11 @@ There are no past versions. Publish this analysis with
   width: 100%;
 }
 
-#wpjskdfgjg .gt_spanner_row {
+#uvnpbizjsi .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#wpjskdfgjg .gt_group_heading {
+#uvnpbizjsi .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -803,7 +841,7 @@ There are no past versions. Publish this analysis with
   text-align: left;
 }
 
-#wpjskdfgjg .gt_empty_group_heading {
+#uvnpbizjsi .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -818,15 +856,15 @@ There are no past versions. Publish this analysis with
   vertical-align: middle;
 }
 
-#wpjskdfgjg .gt_from_md > :first-child {
+#uvnpbizjsi .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#wpjskdfgjg .gt_from_md > :last-child {
+#uvnpbizjsi .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#wpjskdfgjg .gt_row {
+#uvnpbizjsi .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -845,7 +883,7 @@ There are no past versions. Publish this analysis with
   overflow-x: hidden;
 }
 
-#wpjskdfgjg .gt_stub {
+#uvnpbizjsi .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -858,7 +896,7 @@ There are no past versions. Publish this analysis with
   padding-right: 5px;
 }
 
-#wpjskdfgjg .gt_stub_row_group {
+#uvnpbizjsi .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -872,15 +910,15 @@ There are no past versions. Publish this analysis with
   vertical-align: top;
 }
 
-#wpjskdfgjg .gt_row_group_first td {
+#uvnpbizjsi .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#wpjskdfgjg .gt_row_group_first th {
+#uvnpbizjsi .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#wpjskdfgjg .gt_summary_row {
+#uvnpbizjsi .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -890,16 +928,16 @@ There are no past versions. Publish this analysis with
   padding-right: 5px;
 }
 
-#wpjskdfgjg .gt_first_summary_row {
+#uvnpbizjsi .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#wpjskdfgjg .gt_first_summary_row.thick {
+#uvnpbizjsi .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#wpjskdfgjg .gt_last_summary_row {
+#uvnpbizjsi .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -909,7 +947,7 @@ There are no past versions. Publish this analysis with
   border-bottom-color: #D3D3D3;
 }
 
-#wpjskdfgjg .gt_grand_summary_row {
+#uvnpbizjsi .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -919,7 +957,7 @@ There are no past versions. Publish this analysis with
   padding-right: 5px;
 }
 
-#wpjskdfgjg .gt_first_grand_summary_row {
+#uvnpbizjsi .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -929,7 +967,7 @@ There are no past versions. Publish this analysis with
   border-top-color: #D3D3D3;
 }
 
-#wpjskdfgjg .gt_last_grand_summary_row_top {
+#uvnpbizjsi .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -939,11 +977,11 @@ There are no past versions. Publish this analysis with
   border-bottom-color: #D3D3D3;
 }
 
-#wpjskdfgjg .gt_striped {
+#uvnpbizjsi .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#wpjskdfgjg .gt_table_body {
+#uvnpbizjsi .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -952,7 +990,7 @@ There are no past versions. Publish this analysis with
   border-bottom-color: #D3D3D3;
 }
 
-#wpjskdfgjg .gt_footnotes {
+#uvnpbizjsi .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -966,7 +1004,7 @@ There are no past versions. Publish this analysis with
   border-right-color: #D3D3D3;
 }
 
-#wpjskdfgjg .gt_footnote {
+#uvnpbizjsi .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -975,7 +1013,7 @@ There are no past versions. Publish this analysis with
   padding-right: 5px;
 }
 
-#wpjskdfgjg .gt_sourcenotes {
+#uvnpbizjsi .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -989,7 +1027,7 @@ There are no past versions. Publish this analysis with
   border-right-color: #D3D3D3;
 }
 
-#wpjskdfgjg .gt_sourcenote {
+#uvnpbizjsi .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -997,311 +1035,356 @@ There are no past versions. Publish this analysis with
   padding-right: 5px;
 }
 
-#wpjskdfgjg .gt_left {
+#uvnpbizjsi .gt_left {
   text-align: left;
 }
 
-#wpjskdfgjg .gt_center {
+#uvnpbizjsi .gt_center {
   text-align: center;
 }
 
-#wpjskdfgjg .gt_right {
+#uvnpbizjsi .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#wpjskdfgjg .gt_font_normal {
+#uvnpbizjsi .gt_font_normal {
   font-weight: normal;
 }
 
-#wpjskdfgjg .gt_font_bold {
+#uvnpbizjsi .gt_font_bold {
   font-weight: bold;
 }
 
-#wpjskdfgjg .gt_font_italic {
+#uvnpbizjsi .gt_font_italic {
   font-style: italic;
 }
 
-#wpjskdfgjg .gt_super {
+#uvnpbizjsi .gt_super {
   font-size: 65%;
 }
 
-#wpjskdfgjg .gt_footnote_marks {
+#uvnpbizjsi .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#wpjskdfgjg .gt_asterisk {
+#uvnpbizjsi .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#wpjskdfgjg .gt_indent_1 {
+#uvnpbizjsi .gt_indent_1 {
   text-indent: 5px;
 }
 
-#wpjskdfgjg .gt_indent_2 {
+#uvnpbizjsi .gt_indent_2 {
   text-indent: 10px;
 }
 
-#wpjskdfgjg .gt_indent_3 {
+#uvnpbizjsi .gt_indent_3 {
   text-indent: 15px;
 }
 
-#wpjskdfgjg .gt_indent_4 {
+#uvnpbizjsi .gt_indent_4 {
   text-indent: 20px;
 }
 
-#wpjskdfgjg .gt_indent_5 {
+#uvnpbizjsi .gt_indent_5 {
   text-indent: 25px;
 }
 </style>
 <table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
   <thead>
     
+    <tr class="gt_col_headings gt_spanner_row">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="2" colspan="1" scope="col" id="&lt;strong&gt;Characteristic&lt;/strong&gt;"><strong>Characteristic</strong></th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="3" scope="colgroup" id="Data">
+        <span class="gt_column_spanner">Data</span>
+      </th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="3" scope="colgroup" id="Training">
+        <span class="gt_column_spanner">Training</span>
+      </th>
+      <th class="gt_center gt_columns_top_border gt_column_spanner_outer" rowspan="1" colspan="3" scope="colgroup" id="Validation">
+        <span class="gt_column_spanner">Validation</span>
+      </th>
+    </tr>
     <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;Characteristic&lt;/strong&gt;"><strong>Characteristic</strong></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;0&lt;/strong&gt;, N = 200&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;"><strong>0</strong>, N = 200<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;1&lt;/strong&gt;, N = 252&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;"><strong>1</strong>, N = 252<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;Không tân sinh&lt;/strong&gt;, N = 236&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;"><strong>Không tân sinh</strong>, N = 236<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;Tân sinh&lt;/strong&gt;, N = 305&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;"><strong>Tân sinh</strong>, N = 305<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;p-value&lt;/strong&gt;&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;&gt;&lt;sup&gt;2&lt;/sup&gt;&lt;/span&gt;"><strong>p-value</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>2</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;Không tân sinh&lt;/strong&gt;, N = 160&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;"><strong>Không tân sinh</strong>, N = 160<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;Tân sinh&lt;/strong&gt;, N = 218&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;"><strong>Tân sinh</strong>, N = 218<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;p-value&lt;/strong&gt;&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;&gt;&lt;sup&gt;2&lt;/sup&gt;&lt;/span&gt;"><strong>p-value</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>2</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;Không tân sinh&lt;/strong&gt;, N = 76&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;"><strong>Không tân sinh</strong>, N = 76<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;Tân sinh&lt;/strong&gt;, N = 87&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;&gt;&lt;sup&gt;1&lt;/sup&gt;&lt;/span&gt;"><strong>Tân sinh</strong>, N = 87<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span></th>
       <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="&lt;strong&gt;p-value&lt;/strong&gt;&lt;span class=&quot;gt_footnote_marks&quot; style=&quot;white-space:nowrap;font-style:italic;font-weight:normal;&quot;&gt;&lt;sup&gt;2&lt;/sup&gt;&lt;/span&gt;"><strong>p-value</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>2</sup></span></th>
     </tr>
   </thead>
   <tbody class="gt_table_body">
-    <tr><td headers="label" class="gt_row gt_left">Age</td>
-<td headers="stat_1" class="gt_row gt_center">57.3 (14.2)</td>
-<td headers="stat_2" class="gt_row gt_center">61.2 (12.3)</td>
-<td headers="p.value" class="gt_row gt_center">0.002</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">Sex</td>
-<td headers="stat_1" class="gt_row gt_center"></td>
-<td headers="stat_2" class="gt_row gt_center"></td>
-<td headers="p.value" class="gt_row gt_center">0.493</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">    0</td>
-<td headers="stat_1" class="gt_row gt_center">120 (60.0%)</td>
-<td headers="stat_2" class="gt_row gt_center">142 (56.3%)</td>
-<td headers="p.value" class="gt_row gt_center"></td></tr>
-    <tr><td headers="label" class="gt_row gt_left">    1</td>
-<td headers="stat_1" class="gt_row gt_center">80 (40.0%)</td>
-<td headers="stat_2" class="gt_row gt_center">110 (43.7%)</td>
-<td headers="p.value" class="gt_row gt_center"></td></tr>
-    <tr><td headers="label" class="gt_row gt_left">TSUTDT</td>
-<td headers="stat_1" class="gt_row gt_center"></td>
-<td headers="stat_2" class="gt_row gt_center"></td>
-<td headers="p.value" class="gt_row gt_center">0.978</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">    0</td>
-<td headers="stat_1" class="gt_row gt_center">182 (91.0%)</td>
-<td headers="stat_2" class="gt_row gt_center">228 (90.5%)</td>
-<td headers="p.value" class="gt_row gt_center"></td></tr>
-    <tr><td headers="label" class="gt_row gt_left">    1</td>
-<td headers="stat_1" class="gt_row gt_center">18 (9.0%)</td>
-<td headers="stat_2" class="gt_row gt_center">24 (9.5%)</td>
-<td headers="p.value" class="gt_row gt_center"></td></tr>
-    <tr><td headers="label" class="gt_row gt_left">TSPDT</td>
-<td headers="stat_1" class="gt_row gt_center">55 (27.5%)</td>
-<td headers="stat_2" class="gt_row gt_center">71 (28.2%)</td>
-<td headers="p.value" class="gt_row gt_center">0.958</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">TSGD</td>
-<td headers="stat_1" class="gt_row gt_center"></td>
-<td headers="stat_2" class="gt_row gt_center"></td>
-<td headers="p.value" class="gt_row gt_center">0.367</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">    0</td>
-<td headers="stat_1" class="gt_row gt_center">190 (95.0%)</td>
-<td headers="stat_2" class="gt_row gt_center">233 (92.5%)</td>
-<td headers="p.value" class="gt_row gt_center"></td></tr>
-    <tr><td headers="label" class="gt_row gt_left">    1</td>
-<td headers="stat_1" class="gt_row gt_center">10 (5.0%)</td>
-<td headers="stat_2" class="gt_row gt_center">19 (7.5%)</td>
-<td headers="p.value" class="gt_row gt_center"></td></tr>
-    <tr><td headers="label" class="gt_row gt_left">HTL</td>
-<td headers="stat_1" class="gt_row gt_center"></td>
-<td headers="stat_2" class="gt_row gt_center"></td>
-<td headers="p.value" class="gt_row gt_center">0.497</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">    0</td>
-<td headers="stat_1" class="gt_row gt_center">107 (53.5%)</td>
-<td headers="stat_2" class="gt_row gt_center">144 (57.1%)</td>
-<td headers="p.value" class="gt_row gt_center"></td></tr>
-    <tr><td headers="label" class="gt_row gt_left">    1</td>
-<td headers="stat_1" class="gt_row gt_center">93 (46.5%)</td>
-<td headers="stat_2" class="gt_row gt_center">108 (42.9%)</td>
-<td headers="p.value" class="gt_row gt_center"></td></tr>
-    <tr><td headers="label" class="gt_row gt_left">Ruou</td>
-<td headers="stat_1" class="gt_row gt_center"></td>
-<td headers="stat_2" class="gt_row gt_center"></td>
-<td headers="p.value" class="gt_row gt_center">0.217</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">    0</td>
-<td headers="stat_1" class="gt_row gt_center">109 (54.5%)</td>
-<td headers="stat_2" class="gt_row gt_center">153 (60.7%)</td>
-<td headers="p.value" class="gt_row gt_center"></td></tr>
-    <tr><td headers="label" class="gt_row gt_left">    1</td>
-<td headers="stat_1" class="gt_row gt_center">91 (45.5%)</td>
-<td headers="stat_2" class="gt_row gt_center">99 (39.3%)</td>
-<td headers="p.value" class="gt_row gt_center"></td></tr>
-    <tr><td headers="label" class="gt_row gt_left">BMI</td>
-<td headers="stat_1" class="gt_row gt_center">23.2 (2.8)</td>
-<td headers="stat_2" class="gt_row gt_center">23.3 (2.9)</td>
-<td headers="p.value" class="gt_row gt_center">0.477</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">WLE</td>
+<td headers="stat_1_1" class="gt_row gt_center"></td>
+<td headers="stat_2_1" class="gt_row gt_center"></td>
+<td headers="p.value_1" class="gt_row gt_center"><0.001</td>
+<td headers="stat_1_2" class="gt_row gt_center"></td>
+<td headers="stat_2_2" class="gt_row gt_center"></td>
+<td headers="p.value_2" class="gt_row gt_center"><0.001</td>
+<td headers="stat_1_3" class="gt_row gt_center"></td>
+<td headers="stat_2_3" class="gt_row gt_center"></td>
+<td headers="p.value_3" class="gt_row gt_center"><0.001</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    non</td>
+<td headers="stat_1_1" class="gt_row gt_center">214 (90.7%)</td>
+<td headers="stat_2_1" class="gt_row gt_center">130 (42.6%)</td>
+<td headers="p.value_1" class="gt_row gt_center"></td>
+<td headers="stat_1_2" class="gt_row gt_center">144 (90.0%)</td>
+<td headers="stat_2_2" class="gt_row gt_center">89 (40.8%)</td>
+<td headers="p.value_2" class="gt_row gt_center"></td>
+<td headers="stat_1_3" class="gt_row gt_center">70 (92.1%)</td>
+<td headers="stat_2_3" class="gt_row gt_center">41 (47.1%)</td>
+<td headers="p.value_3" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    neo</td>
+<td headers="stat_1_1" class="gt_row gt_center">22 (9.3%)</td>
+<td headers="stat_2_1" class="gt_row gt_center">175 (57.4%)</td>
+<td headers="p.value_1" class="gt_row gt_center"></td>
+<td headers="stat_1_2" class="gt_row gt_center">16 (10.0%)</td>
+<td headers="stat_2_2" class="gt_row gt_center">129 (59.2%)</td>
+<td headers="p.value_2" class="gt_row gt_center"></td>
+<td headers="stat_1_3" class="gt_row gt_center">6 (7.9%)</td>
+<td headers="stat_2_3" class="gt_row gt_center">46 (52.9%)</td>
+<td headers="p.value_3" class="gt_row gt_center"></td></tr>
     <tr><td headers="label" class="gt_row gt_left">kichthuoclon</td>
-<td headers="stat_1" class="gt_row gt_center"></td>
-<td headers="stat_2" class="gt_row gt_center"></td>
-<td headers="p.value" class="gt_row gt_center"><0.001</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">    0</td>
-<td headers="stat_1" class="gt_row gt_center">188 (94.0%)</td>
-<td headers="stat_2" class="gt_row gt_center">198 (78.6%)</td>
-<td headers="p.value" class="gt_row gt_center"></td></tr>
-    <tr><td headers="label" class="gt_row gt_left">    1</td>
-<td headers="stat_1" class="gt_row gt_center">12 (6.0%)</td>
-<td headers="stat_2" class="gt_row gt_center">54 (21.4%)</td>
-<td headers="p.value" class="gt_row gt_center"></td></tr>
+<td headers="stat_1_1" class="gt_row gt_center"></td>
+<td headers="stat_2_1" class="gt_row gt_center"></td>
+<td headers="p.value_1" class="gt_row gt_center"><0.001</td>
+<td headers="stat_1_2" class="gt_row gt_center"></td>
+<td headers="stat_2_2" class="gt_row gt_center"></td>
+<td headers="p.value_2" class="gt_row gt_center"><0.001</td>
+<td headers="stat_1_3" class="gt_row gt_center"></td>
+<td headers="stat_2_3" class="gt_row gt_center"></td>
+<td headers="p.value_3" class="gt_row gt_center">0.011</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    &lt;=5mm</td>
+<td headers="stat_1_1" class="gt_row gt_center">213 (90.3%)</td>
+<td headers="stat_2_1" class="gt_row gt_center">222 (72.8%)</td>
+<td headers="p.value_1" class="gt_row gt_center"></td>
+<td headers="stat_1_2" class="gt_row gt_center">145 (90.6%)</td>
+<td headers="stat_2_2" class="gt_row gt_center">159 (72.9%)</td>
+<td headers="p.value_2" class="gt_row gt_center"></td>
+<td headers="stat_1_3" class="gt_row gt_center">68 (89.5%)</td>
+<td headers="stat_2_3" class="gt_row gt_center">63 (72.4%)</td>
+<td headers="p.value_3" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    &gt;5mm</td>
+<td headers="stat_1_1" class="gt_row gt_center">23 (9.7%)</td>
+<td headers="stat_2_1" class="gt_row gt_center">83 (27.2%)</td>
+<td headers="p.value_1" class="gt_row gt_center"></td>
+<td headers="stat_1_2" class="gt_row gt_center">15 (9.4%)</td>
+<td headers="stat_2_2" class="gt_row gt_center">59 (27.1%)</td>
+<td headers="p.value_2" class="gt_row gt_center"></td>
+<td headers="stat_1_3" class="gt_row gt_center">8 (10.5%)</td>
+<td headers="stat_2_3" class="gt_row gt_center">24 (27.6%)</td>
+<td headers="p.value_3" class="gt_row gt_center"></td></tr>
     <tr><td headers="label" class="gt_row gt_left">Paris</td>
-<td headers="stat_1" class="gt_row gt_center"></td>
-<td headers="stat_2" class="gt_row gt_center"></td>
-<td headers="p.value" class="gt_row gt_center"><0.001</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">    0</td>
-<td headers="stat_1" class="gt_row gt_center">157 (78.5%)</td>
-<td headers="stat_2" class="gt_row gt_center">126 (50.0%)</td>
-<td headers="p.value" class="gt_row gt_center"></td></tr>
-    <tr><td headers="label" class="gt_row gt_left">    1</td>
-<td headers="stat_1" class="gt_row gt_center">43 (21.5%)</td>
-<td headers="stat_2" class="gt_row gt_center">126 (50.0%)</td>
-<td headers="p.value" class="gt_row gt_center"></td></tr>
+<td headers="stat_1_1" class="gt_row gt_center"></td>
+<td headers="stat_2_1" class="gt_row gt_center"></td>
+<td headers="p.value_1" class="gt_row gt_center"><0.001</td>
+<td headers="stat_1_2" class="gt_row gt_center"></td>
+<td headers="stat_2_2" class="gt_row gt_center"></td>
+<td headers="p.value_2" class="gt_row gt_center"><0.001</td>
+<td headers="stat_1_3" class="gt_row gt_center"></td>
+<td headers="stat_2_3" class="gt_row gt_center"></td>
+<td headers="p.value_3" class="gt_row gt_center"><0.001</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    IIa</td>
+<td headers="stat_1_1" class="gt_row gt_center">178 (75.4%)</td>
+<td headers="stat_2_1" class="gt_row gt_center">138 (45.2%)</td>
+<td headers="p.value_1" class="gt_row gt_center"></td>
+<td headers="stat_1_2" class="gt_row gt_center">120 (75.0%)</td>
+<td headers="stat_2_2" class="gt_row gt_center">96 (44.0%)</td>
+<td headers="p.value_2" class="gt_row gt_center"></td>
+<td headers="stat_1_3" class="gt_row gt_center">58 (76.3%)</td>
+<td headers="stat_2_3" class="gt_row gt_center">42 (48.3%)</td>
+<td headers="p.value_3" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Is-Ip</td>
+<td headers="stat_1_1" class="gt_row gt_center">58 (24.6%)</td>
+<td headers="stat_2_1" class="gt_row gt_center">167 (54.8%)</td>
+<td headers="p.value_1" class="gt_row gt_center"></td>
+<td headers="stat_1_2" class="gt_row gt_center">40 (25.0%)</td>
+<td headers="stat_2_2" class="gt_row gt_center">122 (56.0%)</td>
+<td headers="p.value_2" class="gt_row gt_center"></td>
+<td headers="stat_1_3" class="gt_row gt_center">18 (23.7%)</td>
+<td headers="stat_2_3" class="gt_row gt_center">45 (51.7%)</td>
+<td headers="p.value_3" class="gt_row gt_center"></td></tr>
     <tr><td headers="label" class="gt_row gt_left">rightcolon</td>
-<td headers="stat_1" class="gt_row gt_center"></td>
-<td headers="stat_2" class="gt_row gt_center"></td>
-<td headers="p.value" class="gt_row gt_center">0.042</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">    0</td>
-<td headers="stat_1" class="gt_row gt_center">130 (65.0%)</td>
-<td headers="stat_2" class="gt_row gt_center">136 (55.1%)</td>
-<td headers="p.value" class="gt_row gt_center"></td></tr>
-    <tr><td headers="label" class="gt_row gt_left">    1</td>
-<td headers="stat_1" class="gt_row gt_center">70 (35.0%)</td>
-<td headers="stat_2" class="gt_row gt_center">111 (44.9%)</td>
-<td headers="p.value" class="gt_row gt_center"></td></tr>
-    <tr><td headers="label" class="gt_row gt_left">    Unknown</td>
-<td headers="stat_1" class="gt_row gt_center">0</td>
-<td headers="stat_2" class="gt_row gt_center">5</td>
-<td headers="p.value" class="gt_row gt_center"></td></tr>
-    <tr><td headers="label" class="gt_row gt_left">NBI</td>
-<td headers="stat_1" class="gt_row gt_center"></td>
-<td headers="stat_2" class="gt_row gt_center"></td>
-<td headers="p.value" class="gt_row gt_center"><0.001</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">    0</td>
-<td headers="stat_1" class="gt_row gt_center">173 (86.5%)</td>
-<td headers="stat_2" class="gt_row gt_center">42 (16.7%)</td>
-<td headers="p.value" class="gt_row gt_center"></td></tr>
-    <tr><td headers="label" class="gt_row gt_left">    1</td>
-<td headers="stat_1" class="gt_row gt_center">27 (13.5%)</td>
-<td headers="stat_2" class="gt_row gt_center">210 (83.3%)</td>
-<td headers="p.value" class="gt_row gt_center"></td></tr>
+<td headers="stat_1_1" class="gt_row gt_center"></td>
+<td headers="stat_2_1" class="gt_row gt_center"></td>
+<td headers="p.value_1" class="gt_row gt_center">0.024</td>
+<td headers="stat_1_2" class="gt_row gt_center"></td>
+<td headers="stat_2_2" class="gt_row gt_center"></td>
+<td headers="p.value_2" class="gt_row gt_center">0.019</td>
+<td headers="stat_1_3" class="gt_row gt_center"></td>
+<td headers="stat_2_3" class="gt_row gt_center"></td>
+<td headers="p.value_3" class="gt_row gt_center">0.701</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Left</td>
+<td headers="stat_1_1" class="gt_row gt_center">152 (64.4%)</td>
+<td headers="stat_2_1" class="gt_row gt_center">166 (54.4%)</td>
+<td headers="p.value_1" class="gt_row gt_center"></td>
+<td headers="stat_1_2" class="gt_row gt_center">106 (66.2%)</td>
+<td headers="stat_2_2" class="gt_row gt_center">117 (53.7%)</td>
+<td headers="p.value_2" class="gt_row gt_center"></td>
+<td headers="stat_1_3" class="gt_row gt_center">46 (60.5%)</td>
+<td headers="stat_2_3" class="gt_row gt_center">49 (56.3%)</td>
+<td headers="p.value_3" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    Right</td>
+<td headers="stat_1_1" class="gt_row gt_center">84 (35.6%)</td>
+<td headers="stat_2_1" class="gt_row gt_center">139 (45.6%)</td>
+<td headers="p.value_1" class="gt_row gt_center"></td>
+<td headers="stat_1_2" class="gt_row gt_center">54 (33.8%)</td>
+<td headers="stat_2_2" class="gt_row gt_center">101 (46.3%)</td>
+<td headers="p.value_2" class="gt_row gt_center"></td>
+<td headers="stat_1_3" class="gt_row gt_center">30 (39.5%)</td>
+<td headers="stat_2_3" class="gt_row gt_center">38 (43.7%)</td>
+<td headers="p.value_3" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">Tuoicao</td>
+<td headers="stat_1_1" class="gt_row gt_center"></td>
+<td headers="stat_2_1" class="gt_row gt_center"></td>
+<td headers="p.value_1" class="gt_row gt_center">0.010</td>
+<td headers="stat_1_2" class="gt_row gt_center"></td>
+<td headers="stat_2_2" class="gt_row gt_center"></td>
+<td headers="p.value_2" class="gt_row gt_center">0.015</td>
+<td headers="stat_1_3" class="gt_row gt_center"></td>
+<td headers="stat_2_3" class="gt_row gt_center"></td>
+<td headers="p.value_3" class="gt_row gt_center">0.423</td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    &lt;45yrs</td>
+<td headers="stat_1_1" class="gt_row gt_center">45 (19.1%)</td>
+<td headers="stat_2_1" class="gt_row gt_center">33 (10.8%)</td>
+<td headers="p.value_1" class="gt_row gt_center"></td>
+<td headers="stat_1_2" class="gt_row gt_center">32 (20.0%)</td>
+<td headers="stat_2_2" class="gt_row gt_center">23 (10.6%)</td>
+<td headers="p.value_2" class="gt_row gt_center"></td>
+<td headers="stat_1_3" class="gt_row gt_center">13 (17.1%)</td>
+<td headers="stat_2_3" class="gt_row gt_center">10 (11.5%)</td>
+<td headers="p.value_3" class="gt_row gt_center"></td></tr>
+    <tr><td headers="label" class="gt_row gt_left">    &gt;=45yrs</td>
+<td headers="stat_1_1" class="gt_row gt_center">191 (80.9%)</td>
+<td headers="stat_2_1" class="gt_row gt_center">272 (89.2%)</td>
+<td headers="p.value_1" class="gt_row gt_center"></td>
+<td headers="stat_1_2" class="gt_row gt_center">128 (80.0%)</td>
+<td headers="stat_2_2" class="gt_row gt_center">195 (89.4%)</td>
+<td headers="p.value_2" class="gt_row gt_center"></td>
+<td headers="stat_1_3" class="gt_row gt_center">63 (82.9%)</td>
+<td headers="stat_2_3" class="gt_row gt_center">77 (88.5%)</td>
+<td headers="p.value_3" class="gt_row gt_center"></td></tr>
   </tbody>
   
   <tfoot class="gt_footnotes">
     <tr>
-      <td class="gt_footnote" colspan="4"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> Mean (SD); n (%)</td>
+      <td class="gt_footnote" colspan="10"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>1</sup></span> n (%)</td>
     </tr>
     <tr>
-      <td class="gt_footnote" colspan="4"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>2</sup></span> Welch Two Sample t-test; Pearson’s Chi-squared test</td>
+      <td class="gt_footnote" colspan="10"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;"><sup>2</sup></span> Pearson’s Chi-squared test</td>
     </tr>
   </tfoot>
 </table>
 </div>
 </div>
-<div id="roc-curves" class="section level2">
-<h2><strong>ROC CURVES</strong></h2>
-<p><img src="figure/updated_polyp.Rmd/roc-1.png" width="672" style="display: block; margin: auto;" /></p>
-</div>
-<div id="model-summary" class="section level2">
-<h2><strong>MODEL SUMMARY</strong></h2>
+<div id="mod3" class="section level2">
+<h2><strong>MOD3</strong></h2>
 <pre><code>
 Call:
 glm(formula = nhompolyp ~ WLE + Tuoicao + Paris + kichthuoclon + 
-    rightcolon, family = &quot;binomial&quot;, data = train)
+    rightcolon, family = &quot;binomial&quot;, data = df_train)
 
 Deviance Residuals: 
     Min       1Q   Median       3Q      Max  
--2.6667  -0.9289   0.3051   0.9795   1.6655  
+-2.3381  -0.9112   0.4000   0.6368   1.7763  
 
 Coefficients:
-              Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)    -1.0996     0.3171  -3.467 0.000525 ***
-WLE1            2.3722     0.3926   6.042 1.52e-09 ***
-Tuoicao1        0.4824     0.3214   1.501 0.133381    
-Paris1          0.6276     0.3207   1.957 0.050333 .  
-kichthuoclon1   0.7103     0.5287   1.343 0.179116    
-rightcolon1     0.4336     0.2737   1.584 0.113155    
+                 Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)       -1.3464     0.3517  -3.828 0.000129 ***
+WLEneo             2.3786     0.3378   7.042 1.89e-12 ***
+Tuoicao&gt;=45yrs     0.6820     0.3522   1.937 0.052806 .  
+ParisIs-Ip         0.4914     0.2998   1.639 0.101222    
+kichthuoclon&gt;5mm  -0.1805     0.4156  -0.434 0.663991    
+rightcolonRight    0.4606     0.2504   1.840 0.065809 .  
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 
 (Dispersion parameter for binomial family taken to be 1)
 
-    Null deviance: 423.39  on 310  degrees of freedom
-Residual deviance: 328.15  on 305  degrees of freedom
-  (5 observations deleted due to missingness)
-AIC: 340.15
+    Null deviance: 515.08  on 377  degrees of freedom
+Residual deviance: 400.28  on 372  degrees of freedom
+AIC: 412.28
 
-Number of Fisher Scoring iterations: 5</code></pre>
-</div>
-<div id="sens---spec---acc" class="section level2">
-<h2><strong>SENS - SPEC - ACC</strong></h2>
-<p><strong>MODEL 1: WLE</strong></p>
-<pre><code>          threshold  accuracy sensitivity specificity
-threshold 0.6660779 0.7111111   0.4776119   0.9411765</code></pre>
-<p><strong>MODEL 2: 4 factors</strong></p>
-<pre><code>          threshold  accuracy sensitivity specificity
-threshold 0.6367594 0.6544118   0.5074627   0.7971014</code></pre>
-<p><strong>MODEL 3: WLE + 4 factors</strong></p>
-<pre><code>          threshold  accuracy sensitivity specificity
-threshold 0.5842694 0.7333333   0.5820896   0.8823529</code></pre>
-<p><strong>MODEL 4: NBI + 5 factors</strong></p>
-<pre><code>          threshold  accuracy sensitivity specificity
-threshold 0.6636734 0.8592593   0.8208955   0.8970588</code></pre>
-<p><strong>MODEL 5: NBI</strong></p>
-<pre><code>          threshold  accuracy sensitivity specificity
-threshold 0.5492401 0.8602941   0.8208955   0.8985507</code></pre>
-</div>
-<div id="risk-score" class="section level2">
-<h2><strong>RISK SCORE</strong></h2>
-<pre><code>  (Intercept)          WLE1      Tuoicao1        Paris1 kichthuoclon1 
-           -3             5             1             1             2 
-  rightcolon1 
-            1 </code></pre>
-<pre><code>[1] &quot;Score 0 have risk p = 0.250&quot;
-[1] &quot;Score 1 have risk p = 0.339&quot;
-[1] &quot;Score 2 have risk p = 0.442&quot;
-[1] &quot;Score 3 have risk p = 0.550&quot;
-[1] &quot;Score 4 have risk p = 0.654&quot;
-[1] &quot;Score 5 have risk p = 0.744&quot;
-[1] &quot;Score 6 have risk p = 0.818&quot;
-[1] &quot;Score 7 have risk p = 0.874&quot;
-[1] &quot;Score 8 have risk p = 0.914&quot;
-[1] &quot;Score 9 have risk p = 0.943&quot;
-[1] &quot;Score 10 have risk p = 0.962&quot;
-[1] &quot;Score 11 have risk p = 0.975&quot;
-[1] &quot;Score 12 have risk p = 0.984&quot;
-[1] &quot;Score 13 have risk p = 0.989&quot;
-[1] &quot;Score 14 have risk p = 0.993&quot;
-[1] &quot;Score 15 have risk p = 0.996&quot;
-[1] &quot;Score 16 have risk p = 0.997&quot;
-[1] &quot;Score 17 have risk p = 0.998&quot;</code></pre>
-</div>
-<div id="nomogram" class="section level2">
-<h2><strong>NOMOGRAM</strong></h2>
-<pre><code>              nhompolyp                     WLE                 Tuoicao 
-           &quot;Polyp Type&quot; &quot;White Light Endoscopy&quot;                   &quot;Age&quot; 
-                  Paris            kichthuoclon              rightcolon 
- &quot;Paris Classification&quot;            &quot;Polyp Size&quot;              &quot;Location&quot; </code></pre>
-<p><img src="figure/updated_polyp.Rmd/nom-1.png" width="672" style="display: block; margin: auto;" /></p>
-</div>
-<div id="or-plot" class="section level2">
-<h2><strong>OR PLOT</strong></h2>
-<p><img src="figure/updated_polyp.Rmd/or-1.png" width="672" style="display: block; margin: auto;" /></p>
-</div>
-<div id="calibration-plot" class="section level2">
-<h2><strong>CALIBRATION PLOT</strong></h2>
-<p><img src="figure/updated_polyp.Rmd/calib-1.png" width="672" style="display: block; margin: auto;" /></p>
+Number of Fisher Scoring iterations: 4</code></pre>
+<p>Nhìn vào kết quả của bảng summary model sử dụng:</p>
+<ul>
+<li>Khi sử dụng hồi quay đa biến thì chỉ có biến WLE có ý nghĩa thống
+kê</li>
+<li>Chỉ số p-value của các biến khác đều &gt;0.05 dẫn đến việc xuất hiện
+của các biến không còn ý nghĩa thống kê. Và việc đưa vào nomogram cũng
+sẽ không còn ý nghĩa để tính điểm.</li>
+</ul>
+<p><em>Anh Thịnh có gợi ý rằng mình sử dụng data đầu tiên, hơn 400 cases
+thì khi phân tích các biến có ý nghĩa hơn.</em></p>
+<p>Giả định có thể xảy ra: khi mình sử dụng hồi quy đa biến, các biến số
+trong một dữ liệu có thể tác động lẫn nhau dẫn đến kết quả sai lệch.</p>
+<ul>
+<li>Ví dụ: Kích thước lớn có thể là một trong các yếu tố dẫn đến ung thư
+đại trực tràng. Tuy nhiên yếu tố tuổi cao cũng có thể dẫn đến kích thước
+lớn hoặc ung thư đại trực tràng có thể khiến kích thước polyp to ra. Đây
+có thể là trường hợp M-bias nhắc đến ở trên.</li>
+</ul>
 </div>
 <div id="decision-curve-analysis" class="section level2">
 <h2><strong>DECISION CURVE ANALYSIS</strong></h2>
-<p><img src="figure/updated_polyp.Rmd/dca-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/polyp_explain.Rmd/dca-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Theo như hình trên và code mình có thể hiểu được là:</p>
+<ul>
+<li>Model đang sử dụng: nhompolyp ~ WLE + Tuoicao + kichthuoclon + Paris
++ rightcolon</li>
+<li>nhompolyp: the outcome</li>
+<li>WLE, Tuoicao, kichthuoclon, Paris, rightcolon: the predictor
+variables</li>
+<li>as_probability: các biến tiên lượng được sử dụng như xác suất và
+điều này cần thiết để vẽ một DCA</li>
+</ul>
+<p><strong>Đọc kết quả thôi nào!!</strong></p>
+<p><strong>Đường cong lợi ích ròng (Net benefit curve):</strong> Đường
+cong DCA được vẽ với trục x biểu thị xác suất ngưỡng (xác suất trên đó
+điều trị cho bệnh nhân) và trục y biểu thị lợi ích ròng. Lợi ích ròng
+được tính bằng cách so sánh lợi ích (dương tính thực) và tác hại (dương
+tính giả) của việc sử dụng mô hình để đưa ra quyết định điều trị.</p>
+<p><strong>Hình dạng đường cong:</strong> Kiểm tra hình dạng của đường
+cong. Điều quan trọng là phải quan sát xem liệu đường cong có nằm trên
+đường không có lợi ích ròng hay không (đường ngang ở mức 0) qua các
+ngưỡng xác suất khác nhau.</p>
+<p><strong>Lợi ích ròng dương:</strong> Nếu đường cong luôn nằm trên
+đường lợi ích ròng bằng 0, điều đó cho thấy rằng việc sử dụng mô hình để
+hướng dẫn các quyết định điều trị là có lợi so với việc điều trị cho tất
+cả mọi người và không điều trị cho ai. Điều này có nghĩa là các dự đoán
+của mô hình sẽ tăng thêm giá trị trong quá trình ra quyết định lâm
+sàng.</p>
+<p><strong>Ngưỡng tối ưu:</strong> Xác định điểm trên đường cong gần
+đường lợi ích ròng bằng 0 nhất. Điểm này là xác suất ngưỡng tối ưu. Đó
+là mức xác suất mà tại đó các dự đoán của mô hình mang lại lợi ích ròng
+tối đa, tạo ra sự cân bằng hợp lý giữa các dự đoán tích cực thực sự và
+các dự đoán dương tính giả.</p>
+<p><strong>So sánh với các chiến lược:</strong> So sánh lợi ích ròng ở
+ngưỡng tối ưu với lợi ích ròng của chiến lược “đối xử với mọi người” và
+“không đối xử với ai”. Nếu lợi ích ròng ở ngưỡng tối ưu cao hơn các
+chiến lược này, điều đó cho thấy rằng việc sử dụng mô hình sẽ có lợi hơn
+trong việc hướng dẫn các quyết định điều trị.</p>
+<p><strong>Ý nghĩa lâm sàng:</strong> Ngưỡng tối ưu cung cấp thông tin
+chi tiết về thời điểm và bệnh nhân nào mà các dự đoán của mô hình có giá
+trị nhất. Nó thông báo cho các chuyên gia chăm sóc sức khỏe về phạm vi
+xác suất mà việc sử dụng mô hình sẽ nâng cao kết quả của bệnh nhân.</p>
+<p><strong>Hỗ trợ ra quyết định:</strong> Đường cong DCA giúp các bác sĩ
+lâm sàng quyết định xem việc sử dụng mô hình dự đoán có mang lại lợi ích
+cho việc ra quyết định lâm sàng hay không. Nếu đường cong luôn nằm trên
+đường lợi ích ròng bằng 0, điều đó cho thấy rằng các dự đoán của mô hình
+đóng góp tích cực vào các quyết định điều trị.</p>
+<p><strong>Khả năng áp dụng:</strong> Xem xét bối cảnh nghiên cứu và dân
+số bệnh nhân khi giải thích kết quả. Kết quả DCA có thể thay đổi dựa
+trên các tình huống lâm sàng khác nhau.</p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1328,9 +1411,11 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] dcurves_0.4.0   readxl_1.4.2    predtools_0.0.3 rms_6.7-0      
- [5] Hmisc_5.1-0     ggplot2_3.4.3   rsample_1.1.1   pROC_1.18.2    
- [9] gtsummary_1.7.0 haven_2.5.2    
+ [1] lubridate_1.9.2 forcats_1.0.0   stringr_1.5.0   dplyr_1.1.2    
+ [5] purrr_1.0.1     readr_2.1.4     tidyr_1.3.0     tibble_3.2.1   
+ [9] ggplot2_3.4.3   tidyverse_2.0.0 dcurves_0.4.0   readxl_1.4.2   
+[13] predtools_0.0.3 rms_6.7-0       Hmisc_5.1-0     rsample_1.1.1  
+[17] pROC_1.18.2     gtsummary_1.7.0
 
 loaded via a namespace (and not attached):
  [1] nlme_3.1-160         fs_1.6.1             rprojroot_2.0.3     
@@ -1343,29 +1428,28 @@ loaded via a namespace (and not attached):
 [22] xml2_1.3.3           sandwich_3.0-2       labeling_0.4.2      
 [25] sass_0.4.5           scales_1.2.1         checkmate_2.1.0     
 [28] polspline_1.1.22     mvtnorm_1.2-2        commonmark_1.9.0    
-[31] stringr_1.5.0        digest_0.6.31        foreign_0.8-83      
-[34] rmarkdown_2.20       RConics_1.1.1        base64enc_0.1-3     
-[37] pkgconfig_2.0.3      htmltools_0.5.4      parallelly_1.36.0   
-[40] fastmap_1.1.0        highr_0.10           htmlwidgets_1.6.2   
-[43] rlang_1.1.0          rstudioapi_0.14      farver_2.1.1        
-[46] jquerylib_0.1.4      generics_0.1.3       zoo_1.8-11          
-[49] jsonlite_1.8.4       dplyr_1.1.2          magrittr_2.0.3      
-[52] Formula_1.2-4        Matrix_1.5-1         Rcpp_1.0.9          
-[55] munsell_0.5.0        fansi_1.0.4          lifecycle_1.0.3     
-[58] furrr_0.3.1          stringi_1.7.8        multcomp_1.4-25     
-[61] yaml_2.3.7           MASS_7.3-58.1        plyr_1.8.8          
-[64] grid_4.2.2           parallel_4.2.2       listenv_0.9.0       
-[67] promises_1.2.0.1     forcats_1.0.0        lattice_0.20-45     
-[70] splines_4.2.2        hms_1.1.2            knitr_1.41          
-[73] pillar_1.9.0         markdown_1.5         codetools_0.2-18    
-[76] glue_1.6.2           evaluate_0.20        data.table_1.14.8   
-[79] broom.helpers_1.13.0 vctrs_0.6.0          httpuv_1.6.9        
-[82] cellranger_1.1.0     MatrixModels_0.5-1   gtable_0.3.3        
-[85] purrr_1.0.1          tidyr_1.3.0          future_1.32.0       
-[88] cachem_1.0.7         xfun_0.37            broom_1.0.4         
-[91] later_1.3.0          survival_3.4-0       tibble_3.2.1        
-[94] workflowr_1.7.0      cluster_2.1.4        globals_0.16.2      
-[97] TH.data_1.1-2        ellipsis_0.3.2      </code></pre>
+[31] digest_0.6.31        foreign_0.8-83       rmarkdown_2.20      
+[34] RConics_1.1.1        base64enc_0.1-3      pkgconfig_2.0.3     
+[37] htmltools_0.5.4      parallelly_1.36.0    fastmap_1.1.0       
+[40] highr_0.10           htmlwidgets_1.6.2    rlang_1.1.0         
+[43] rstudioapi_0.14      farver_2.1.1         jquerylib_0.1.4     
+[46] generics_0.1.3       zoo_1.8-11           jsonlite_1.8.4      
+[49] magrittr_2.0.3       Formula_1.2-4        Matrix_1.5-1        
+[52] Rcpp_1.0.9           munsell_0.5.0        fansi_1.0.4         
+[55] lifecycle_1.0.3      furrr_0.3.1          stringi_1.7.8       
+[58] multcomp_1.4-25      yaml_2.3.7           MASS_7.3-58.1       
+[61] plyr_1.8.8           grid_4.2.2           parallel_4.2.2      
+[64] listenv_0.9.0        promises_1.2.0.1     lattice_0.20-45     
+[67] splines_4.2.2        hms_1.1.2            knitr_1.41          
+[70] pillar_1.9.0         markdown_1.5         codetools_0.2-18    
+[73] glue_1.6.2           evaluate_0.20        data.table_1.14.8   
+[76] broom.helpers_1.13.0 tzdb_0.3.0           vctrs_0.6.0         
+[79] httpuv_1.6.9         MatrixModels_0.5-1   cellranger_1.1.0    
+[82] gtable_0.3.3         future_1.32.0        cachem_1.0.7        
+[85] xfun_0.37            broom_1.0.4          later_1.3.0         
+[88] survival_3.4-0       workflowr_1.7.0      cluster_2.1.4       
+[91] timechange_0.1.1     globals_0.16.2       TH.data_1.1-2       
+[94] ellipsis_0.3.2      </code></pre>
 </div>
 </div>
 
